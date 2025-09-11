@@ -1,0 +1,221 @@
+* {
+  all: unset;
+}
+
+@import "/home/guest/.cache/wal/colors.scss";
+
+.time-text {
+  font-size: 70px;
+  font-weight: bold;
+  color: $color5;
+}
+
+.bigbutton {
+  font-size: 30px;
+  color: $color3;
+  padding: 10px 20px;
+  margin: 5px;
+}
+
+.button {
+  font-size: 20px;
+  color: $color3;
+  padding: 3px 8px;
+}
+
+.smallbutton {
+  font-size: 13px;
+  color: $color3;
+  background-color: rgba(232, 221, 167, 0.2);
+  border-radius: 10px;
+  margin: 5px;
+  padding: 3px 8px;
+  border-style: hidden;
+}
+
+.smallbuttondark {
+  font-size: 13px;
+  color: #32302f;
+  background-color: rgba(#32302f, 0.1);
+  border-radius: 10px;
+  margin: 5px;
+  padding: 3px 8px;
+  border-style: hidden;
+}
+
+.smallbuttondark0 {
+  font-size: 13px;
+  color: #32302f;
+  background-color: rgba(#32302f, 0.1);
+  border-radius: 10px;
+  margin: 5px;
+  padding: 3px 8px;
+  border-style: hidden;
+}
+
+.transparent {
+  padding: 5px;
+  background-color: transparent;
+}
+
+.box {
+  background-color: #32302f;
+  border-radius: 10px;
+}
+
+.text {
+  font-size: 40px;
+  color: $color3;
+  font-weight: bold;
+}
+
+.smalltext {
+  font-size: 15px;
+  color: $color3;
+  padding: 5px 0px;
+}
+
+.smalltext0 {
+  font-size: 15px;
+  color: $color9;
+  padding: 5px 0px;
+}
+
+.smalltext1 {
+  font-size: 15px;
+  background-color: $color9;
+  color: #32302f;
+  padding: 0px 3px 0px 7px;
+  border-radius: 10px;
+}
+
+.smalltextdark {
+  font-size: 15px;
+  color: #32302f;
+  padding: 5px 0px;
+}
+
+.sliders scale trough highlight {
+  all: unset;
+  background-color: $color13;
+  color: $color5;
+  border-radius: 10px;
+}
+
+.sliders scale trough {
+  all: unset;
+  background-color: $color3;
+  border-radius: 10px;
+  min-height: 5px;
+  min-width: 50px;
+  margin:10px;
+}
+
+
+.traybg {
+  background-color: $color13;
+  border-radius: 10px;
+  min-height: 50px;
+}
+
+.tray menu{
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #32302f;
+  
+  
+  menuitem{
+    border-radius: 5px;
+    padding: 3px;
+    margin: 3px;
+    color: $color3;
+    background-color: transparent;
+    transition: all .3s ease;
+  }
+
+  menuitem arrow {
+    min-width: 15px;
+
+    &:dir(ltr) {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic')
+    }
+  }
+
+  menuitem:hover {
+    background-color: $color3;
+    color: #32302f;
+  }
+}
+
+.player {
+  padding: 10px;
+  margin: 5px 0px;
+  background-color: $color13;
+  border-radius: 10px;
+}
+
+.cal {
+  border-radius: 10px;
+  padding: 0.2rem 0.35rem;
+  margin-left: 10px;
+  color: #32303f;
+  background-color: rgba($color5,0.5);
+
+  &.highlight {
+    padding: 10rem;
+  }
+}
+.cal:selected {
+  background: #32302f;
+  color: $color5;
+  padding-top: 0px;
+}
+
+calendar.button {
+  background-color: transparent;
+}
+calendar.highlight {
+  font-weight:bold;
+}
+
+.workspace-button {
+  font-size: 13px;
+  color: $color13;
+  background-color: transparent;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 3px 8px;
+  border-style: hidden;
+}
+
+.workspace-on-screen {
+  font-size: 13px;
+  color: #32302f;
+  background-color: $color13;
+  border-radius: 10px;
+  margin: 3px;
+  padding: 3px 8px;
+  border-style: hidden;
+}
+
+.kbd {
+  font-size:15px;
+  color: $color3;
+  margin: 3px;
+  padding: 3px;
+}
+
+.kbdbox {
+  background-color: #32302f;
+  border-color: $color0;
+  border-radius: 20px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+tooltip {
+  background-color: #32302f;
+  color: $color3;
+  border-radius: 5px;
+  padding: 3px;
+}
