@@ -1,0 +1,385 @@
+(defpoll hour :interval "60s"
+  "date +%H")
+(defpoll min :interval "60s"
+  "date +%M")
+(defpoll date :interval "12h"
+  "date +%a%n%d.%b")
+
+(defpoll calendar_day :interval "10h" "date '+%d'")
+(defpoll calendar_month :interval "10h" "date '+%m'")
+;(defpoll calendar_year :interval "10h" "date '+%Y'")
+
+(defwidget buttons []
+  (box	:orientation "v"
+	:valign "center"
+	:space-evenly  "false"
+    (button :class "bigbutton"
+	:onclick "foot &" "")
+    (button :class "bigbutton" :onclick "rofi -show drun &" "󰌧")
+  )
+)
+
+(defwidget empty []
+  (label :class "transparent" :text " ")
+)
+
+(defwidget divider []
+  (label :class "smalltext"
+  	:halign "center"
+  	:text "------")
+)
+
+(defwidget time-widget []
+  (box
+  	:orientation "h"
+	:halign "center"
+	:space-evenly "false"
+    (label :class "time-text" :text "${hour}:${min}")
+    
+    (buttons)
+  )
+)
+
+(defwindow clock-window
+  :geometry (geometry :x "150px" :y "100px" :width "300px" :height "170px")
+  :stacking "bottom"
+  :monitor 0
+  :anchor "top left"
+  :focusable false
+  :transparent true
+  :exclusive false
+  (box :orientation "v"
+  	(time-widget)
+	(cal)
+	)
+)
+
+(defwidget cal []
+	(box
+	:space-evenly false
+		(calendar
+		:class "cal"
+		:month {calendar_month ?: "1"}
+		:year "2025"
+		:day {calendar_day ?: "1"})
+	)
+)
+
+
+
+(defvar revealvar false)
+
+(defwindow bar 
+	:geometry (geometry 
+		:x 0
+		:y "10px"
+		:width 0 
+		:height "97.5%"
+		:anchor "center left")
+	:stacking "fg"
+	:monitor 0
+	(bar1))
+
+(defwindow secbar 
+	:geometry (geometry 
+		:x 0
+		:y "10px"
+		:width 0 
+		:height "97.5%"
+		:anchor "center left")
+	:stacking "fg"
+	:monitor 1
+	(bar1))
+
+(defwidget bar_revealer []
+	(eventbox
+		:onhover "eww update revealvar=true"
+		:onhoverlost "eww update revealvar=false"
+	(box :class "box"
+		:space-evenly false
+		:width 15
+	(revealer
+		:transition "slideright"
+		:duration "250ms"
+		:reveal revealvar
+	(box
+		:class "box"
+		:orientation "h"
+		:halign "start"
+		:width "150px"
+		:space-evenly false
+		(empty)
+		(empty)
+		(box
+			:class "transparent"
+			:orientation "v"
+			:halign "start"
+			:width "140px"
+			(top)
+			(low))
+		(empty)
+		(empty)
+	))))
+)
+
+(defwidget bar1 []
+	(bar_revealer)
+)
+
+(defwidget top []
+	(box :class "menu"
+		:width "175px"
+		:orientation "v"
+		:halign "center"
+		:valign "start"
+		:space-evenly false
+		:hexpand true
+		(empty)
+		(empty)
+		(label :class "text" :text hour)
+		(label :class "text" :text min)
+		(quicklaunch)
+		(divider)
+		(workspaces)
+	)
+)
+
+(defwidget low []
+	(box :class "menu"
+		:hexpand true
+		:orientation "v"
+		:halign "center"
+		:space-evenly false
+		:valign "end"
+		(kbdtogglebutton)
+		(player)
+		(sliders)
+		(sysbut)
+		(shutdown)
+		(empty)
+	)
+)
+
+(defwidget quicklaunch []
+	(box :orientation "v"
+		:space-evenly false
+
+	(box :class "menu"
+		:orientation "h"
+		:space-evenly false
+		(empty)
+		(button :class "button"
+		:onclick "firefox &" "")
+		(button :class "button"
+		:onclick "foot bash -c 'cmus'&" "󰎇")
+		(empty)
+	)
+	(box :class "menu"
+		:orientation "h"
+		:space-evenly false
+		(empty)
+		(button :class "button"
+		:onclick "wvkbd-edit -L 250 &" "󰌌")
+		(button :class "button"
+		:onclick "foot bash -c 'yazi'&" "󰉋")
+		(empty)
+	)
+	)
+)
+
+(defwidget sliders []
+	(box :class "menu"
+		:orientation "v"
+		:halign "center"
+		(volume)
+		(brightness)
+	)
+)
+
+(defpoll volume
+  :interval "1s"
+  "pactl get-sink-volume @DEFAULT_SINK@ | grep '%' | cut -d '/' -f 2 | cut -d '%' -f 1 | tr -d ' '")
+
+(defpoll brightness
+   :interval "1s"
+   "brightnessctl | awk -F'[()%]' '/Current brightness/ {print $2}' ")
+
+(defpoll bat
+   :interval "5s"
+   "upower -b | grep 'percentage:'  | cut -d':' -f2 | tr -dc '0-9'")
+
+(defwidget volume []
+	(box :orientation "h"
+		:class "sliders"
+		:space-evenly false
+	(label :class "smalltext" :text "󰋋 ")
+	(scale
+		:min 0 
+		:max 101
+		:width 80
+		:active true
+		:onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
+		:value volume)
+	)
+)
+
+(defwidget brightness []
+	(box :orientation "h"
+		:class "sliders"
+		:space-evenly false
+	(label :class "smalltext" :text "󰃞 ")
+	(scale
+		:min 0 
+		:max 101
+		:width 80
+		:active true
+		:onchange "brightnessctl -d intel_backlight s {}%"
+		:value brightness)
+	)
+)
+
+(defwidget tray []
+	(box :class "traybg"
+		:width 40
+	(systray
+		:orientation "v"
+		:pack-direction "down"
+		:class "tray"
+		:icon-size 20
+		:prepend-new true
+	))
+)
+
+(defwidget sysbut []
+	(box :orientation "h"
+		
+		(label :class "smalltext0"
+			:halign "start"
+			:text date)
+		(label :class "smalltext0"
+			:text "${bat} 󰂀"
+			)
+	)
+)
+
+(defvar revealsys false)
+(defwidget shutdown []
+	(eventbox
+		:onhover "eww update revealsys=true"
+		:onhoverlost "eww update revealsys=false"
+	(box :class "smalltext1"
+		:hexpand false
+		:halign "start"
+		:width 15
+		:height 15
+		"⭘"
+	(revealer
+		:transition "slideright"
+		:duration "500ms"
+		:reveal revealsys
+	(box :class "smalltext1"
+		:width 95
+		:height 15
+		:orientation "h"
+		:space-evenly false
+		(button :class "smallbuttondark0"
+			:onclick "systemctl suspend"
+			"")
+		(button :class "smallbuttondark0"
+			:onclick "shutdown now"
+			"")
+		(button :class "smallbuttondark0"
+			:onclick "shutdown -r now"
+			"")
+	))))
+)
+
+(defpoll music-title      :interval "1s" "playerctl metadata | grep title | cut -d' ' -f4- | sed 's/^[[:space:]]*//'")
+(defpoll music-artist     :interval "1s" "playerctl metadata | grep artist | cut -d' ' -f4- | sed 's/^[[:space:]]*//'")
+(defpoll music-status     :interval "5s" "echo $(playerctl status 2>&1)")
+
+(defwidget player []
+	(box	
+		:visible {!('No players found'=~music-status)}
+		:class "player"
+		:space-evenly false
+		:orientation "v"
+		(label
+			:class "smalltextdark"
+			:halign "start"
+			:text music-title
+			:limit-width 10
+			:wrap true
+		)
+		(label
+			:class "smalltextdark"
+			:halign "end"
+			:text music-artist
+			:limit-width 10
+		)
+
+		(box
+			:class "player-info"
+			:space-evenly true
+			:orientation "h"
+			(button
+				:class "smallbuttondark"
+				:onclick "playerctl previous"
+				"󰒮")
+			(button
+				:class "smallbuttondark"
+				:onclick "playerctl play-pause"
+				"󰐎")
+			(button 
+				:class "smallbuttondark"
+				:onclick "playerctl next"
+				"󰒭")
+		)
+	)
+)
+
+
+(deflisten workspace "/home/guest/.cargo/bin/hyprland-workspaces eDP-1")
+
+(defwidget workspaces []
+  (box :orientation "h"
+    (box
+	:orientation "v"
+	:halign "start"
+      (for i in workspace
+        (button
+	:class "${i.class}"
+	:onclick "hyprctl dispatch workspace ${i.id}"
+	"${i.name}"))
+	)
+    (tray)
+))
+
+(defwidget kbdtogglebutton []
+	(button :onclick "eww open --toggle kbdtoggle"
+		:halign "start"
+		:class "smallbutton"
+		"osk")
+)
+
+(defwindow kbdtoggle
+	:monitor 0
+	:geometry (geometry
+		:anchor "center right"
+		:width "30px"
+		:height "80px")
+	:stacking "overlay"
+	(kbd)
+)
+
+(defwidget kbd []
+	(box :orientation "v"
+		:class "kbdbox"
+		(button :class "kbd"
+			:onclick "wvkbd-edit -L 250 &"
+			"")
+		(button :class "kbd"
+			:onclick "pkill -SIGUSR1 wvkbd-edit"
+			"")
+	)
+)
