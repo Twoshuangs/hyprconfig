@@ -151,7 +151,7 @@
 		:halign "center"
 		:space-evenly false
 		:valign "end"
-		(kbdtogglebutton)
+		(buttons2)
 		(player)
 		(sliders)
 		(sysbut)
@@ -355,12 +355,15 @@
     (tray)
 ))
 
-(defwidget kbdtogglebutton []
-	(button :onclick "eww open --toggle kbdtoggle"
-		:halign "start"
-		:class "smallbutton"
-		"osk")
-)
+(defwidget buttons2 []
+	(box :orientation "h"
+		(button :onclick "eww open --toggle kbdtoggle"
+			:class "smallbutton" "󰔡")
+		(button :onclick "eww update revealvar='false'"
+			:class "smallbutton" "")
+		(button :onclick "eww update revealsys='true'"
+			:class "smallbutton" "󰟃")
+))
 
 (defwindow kbdtoggle
 	:monitor 0
