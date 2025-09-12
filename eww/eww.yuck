@@ -15,7 +15,7 @@
 	:space-evenly  "false"
     (button :class "bigbutton"
 	:onclick "foot &" "")
-    (button :class "bigbutton" :onclick "rofi -show drun &" "󰌧")
+    (button :class "bigbutton" :onclick "eww update appvar='true' ; eww open launchclose &" "󰌧")
   )
 )
 
@@ -386,3 +386,32 @@
 			"")
 	)
 )
+
+(defwidget launcher []
+	(box :class "box"
+		:width 300
+		:height 250
+		:visible appvar
+		:orientation "v"
+		(app :name "Foot" :cmd "foot &")
+		(app :name "Firefox" :cmd "firefox &")
+		(app :name "Thunar" :cmd "thunar &")
+		(app :name "Calibre" :cmd "calibre &")
+		(app :name "VLC" :cmd "vlc &")
+		;(app :name "Rnote" :cmd "flatpak run com.github.flxzt.rnote &")
+		(app :name "Discord" :cmd "vesktop &")
+))
+
+(defwindow launchclose 
+	:geometry (geometry :width "100%" :height "100%")
+	:stacking "fg"
+	:monitor 0
+	(button
+	:class "transparent"
+	:onclick "/home/guest/.config/eww/scripts/closemenu appvar launchclose"
+	" "))
+
+(defwidget app [name cmd]
+	(button :class "smallbutton"
+		:onclick "${cmd}"
+		"${name}"))
